@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>🦆logia — Jogos de Patologia</title>
+<style>
+:root{
+  --verde:#1f6f6a;
+  --verde-escuro:#154e4a;
+  --verde-claro:#eaf5f2;
+  --bege:#f5efe4;
+  --dourado:#c79a3d;
+  --coral:#c9633f;
+  --texto:#203536;
+  --muted:#71817e;
+  --branco:#ffffff;
+  --borda:#ded5c5;
+  --bom:#2f6d5e;
+  --ruim:#b3492f;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--texto);
+  background:
+    radial-gradient(circle at 10% 5%,rgba(199,154,61,.12),transparent 30%),
+    radial-gradient(circle at 90% 90%,rgba(31,111,106,.12),transparent 35%),
+    var(--bege);
+}
+
+/* TOPO */
+.header{
+  background:linear-gradient(135deg, var(--verde-escuro), var(--verde));
+  color:white;
+  padding:calc(55px + env(safe-area-inset-top)) 20px 50px;
+  text-align:center;
+}
+.logo{
+  font-size:clamp(2.5rem,8vw,4.5rem);
+  font-weight:800;
+  letter-spacing:-3px;
+  margin:0;
+}
+.subtitle{
+  margin:12px auto 0;
+  max-width:650px;
+  font-size:clamp(.95rem,2vw,1.15rem);
+  line-height:1.6;
+  opacity:.9;
+}
+.author{
+  margin-top:18px;
+  font-size:.85rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  opacity:.75;
+}
+
+/* NAVEGAÇÃO */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--borda);
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  padding:10px 14px;
+}
+.nav a{
+  text-decoration:none;
+  color:var(--verde-escuro);
+  font-weight:700;
+  font-size:.9rem;
+  padding:9px 15px;
+  border-radius:999px;
+  transition:.2s;
+}
+.nav a:hover{ background:var(--verde-claro); }
+
+.container{ width:min(1100px,calc(100% - 30px)); margin:auto; }
+
+/* INTRO */
+.intro{ text-align:center; padding:55px 10px 30px; }
+.section-label{
+  font-family:"Courier New",monospace;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--coral);
+  font-size:.72rem;
+  font-weight:bold;
+}
+.intro h1{
+  margin:8px 0 12px;
+  font-size:clamp(2rem,5vw,3rem);
+  color:var(--verde-escuro);
+}
+.intro p{
+  max-width:680px;
+  margin:auto;
+  color:var(--muted);
+  line-height:1.7;
+  white-space:pre-line;
+  text-align:left;
+}
+.intro p.centered{ text-align:center; }
+
+/* JOGOS */
+.games{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:25px;
+  padding:20px 0 60px;
+}
+.game-card{
+  background:var(--branco);
+  border:1px solid var(--borda);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 12px 35px rgba(21,78,74,.08);
+  display:flex;
+  flex-direction:column;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.game-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 18px 45px rgba(21,78,74,.14);
+}
+.game-top{
+  padding:25px;
+  background:linear-gradient(135deg, var(--verde-claro), #fff);
+  border-bottom:1px solid var(--borda);
+}
+.game-number{
+  font-family:"Courier New",monospace;
+  color:var(--coral);
+  font-size:.72rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  font-weight:bold;
+}
+.game-icon{ font-size:2.3rem; margin:8px 0; }
+.game-title{
+  font-family:Georgia,serif;
+  color:var(--verde-escuro);
+  font-size:1.45rem;
+  margin:5px 0 8px;
+  line-height:1.2;
+}
+.game-description{
+  color:#5f706e;
+  font-size:.92rem;
+  line-height:1.55;
+  margin:0;
+}
+.game-content{
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+.info{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.badge{
+  background:#f5f2eb;
+  border:1px solid var(--borda);
+  border-radius:999px;
+  padding:6px 10px;
+  font-family:"Courier New",monospace;
+  font-size:.7rem;
+  color:#687875;
+}
+.play{
+  margin-top:auto;
+  display:block;
+  width:100%;
+  text-align:center;
+  text-decoration:none;
+  background:var(--verde);
+  color:white;
+  padding:14px 18px;
+  border-radius:12px;
+  font-weight:bold;
+  font-size:.95rem;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  transition:.2s;
+}
+.play:hover{ background:var(--verde-escuro); transform:translateY(-1px); }
+
+/* RODAPÉ */
+.footer{
+  text-align:center;
+  border-top:1px solid var(--borda);
+  padding:35px 15px calc(45px + env(safe-area-inset-bottom));
+  color:var(--muted);
+  font-family:"Courier New",monospace;
+  font-size:.72rem;
+}
+.footer strong{ color:var(--verde-escuro); }
+
+/* ===== MODAL DO QUIZ ===== */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(21,30,29,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  padding-top:calc(20px + env(safe-area-inset-top));
+  padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  z-index:100;
+  overscroll-behavior:contain;
+}
+.modal-overlay.open{ display:flex; }
+.modal-card{
+  width:100%;
+  max-width:640px;
+  max-height:88vh;
+  max-height:88dvh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  background:var(--branco);
+  border-radius:20px;
+  box-shadow:0 30px 60px -25px rgba(0,0,0,.4);
+  position:relative;
+}
+.modal-close{
+  position:absolute;
+  top:16px;
+  right:16px;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,.2);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+  z-index:2;
+}
+.modal-close:hover{ background:rgba(255,255,255,.35); }
+.modal-top{
+  background:linear-gradient(135deg, var(--verde-escuro), var(--verde));
+  color:#f3f1ea;
+  padding:28px 32px 24px;
+  border-radius:20px 20px 0 0;
+}
+.modal-eyebrow{
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  opacity:.8;
+  margin-bottom:6px;
+}
+.modal-top h2{
+  font-family:Georgia,serif;
+  font-weight:700;
+  font-size:24px;
+  line-height:1.2;
+  margin:0 0 4px;
+}
+.modal-sub{ font-size:14px; opacity:.85; }
+.progress-wrap{ padding:16px 32px 0; }
+.progress-track{
+  height:6px;
+  background:var(--borda);
+  border-radius:99px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:var(--coral);
+  width:0%;
+  transition:width .35s ease;
+}
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:6px;
+  font-weight:600;
+}
+.modal-body{ padding:28px 32px 32px; }
+.question{
+  font-family:Georgia,serif;
+  font-size:20px;
+  font-weight:600;
+  line-height:1.35;
+  margin:0 0 22px;
+  color:var(--texto);
+}
+.options{ display:flex; flex-direction:column; gap:10px; }
+.opt{
+  text-align:left;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1.5px solid var(--borda);
+  background:#fbfbf9;
+  font-size:15px;
+  font-family:Arial, sans-serif;
+  color:var(--texto);
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.opt:hover{ border-color:var(--verde); background:var(--verde-claro); }
+.opt.correct{ border-color:var(--bom); background:#e3f1ea; font-weight:600; }
+.opt.wrong{ border-color:var(--ruim); background:#f7e6e1; }
+.opt:disabled{ cursor:default; }
+.feedback{
+  margin-top:16px;
+  font-size:14px;
+  padding:12px 14px;
+  border-radius:10px;
+  background:var(--verde-claro);
+  color:#2c4e49;
+  display:none;
+  line-height:1.5;
+}
+.next-btn{
+  margin-top:20px;
+  display:none;
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:12px;
+  background:var(--verde-escuro);
+  color:#fff;
+  font-family:inherit;
+  font-weight:600;
+  font-size:15px;
+  cursor:pointer;
+}
+.next-btn:hover{ background:var(--verde); }
+.result{ text-align:center; display:none; }
+.result h2{
+  font-family:Georgia,serif;
+  font-size:28px;
+  margin:0 0 8px;
+  color:var(--texto);
+}
+.result .score{
+  font-size:48px;
+  font-weight:700;
+  color:var(--verde-escuro);
+  font-family:Georgia,serif;
+  margin:12px 0;
+}
+.result p{ color:var(--muted); font-size:15px; margin:0 0 24px; }
+.restart-btn{
+  padding:12px 28px;
+  border-radius:99px;
+  border:1.5px solid var(--verde-escuro);
+  background:transparent;
+  color:var(--verde-escuro);
+  font-weight:600;
+  font-family:inherit;
+  cursor:pointer;
+}
+.restart-btn:hover{ background:var(--verde-escuro); color:#fff; }
+
+/* TABLET */
+@media(max-width:850px){
+  .games{ grid-template-columns:1fr; max-width:650px; margin:auto; }
+  .game-card{ width:100%; }
+}
+
+/* CELULAR */
+@media(max-width:600px){
+  .header{ padding:40px 18px; }
+  .logo{ letter-spacing:-2px; }
+  .nav{
+    justify-content:flex-start;
+    overflow-x:auto;
+    white-space:nowrap;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .nav::-webkit-scrollbar{ display:none; }
+  .nav a{ flex:0 0 auto; font-size:.82rem; }
+  .container{ width:min(100% - 22px,650px); }
+  .intro{ padding:40px 5px 20px; }
+  .intro h1{ font-size:2rem; }
+  .games{ padding-top:10px; gap:18px; }
+  .game-top{ padding:21px; }
+  .game-content{ padding:21px; }
+  .game-title{ font-size:1.3rem; }
+  .game-description{ font-size:.88rem; }
+  .modal-top{ padding:24px 22px 20px; }
+  .progress-wrap{ padding:14px 22px 0; }
+  .modal-body{ padding:22px; }
+}
+
+@media(max-width:380px){
+  .logo{ font-size:2.4rem; }
+  .game-top, .game-content{ padding:18px; }
+  .game-title{ font-size:1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🦆logia</div>
+  <div class="subtitle">
+    Patologia Bucal
+    <br>
+    Jogos e atividades interativas para a monitoria de Estomatologia.
+  </div>
+  <div class="author">Monitoria de Patologia</div>
+</header>
+
+<nav class="nav">
+  <a href="#inicio">🏠 Início</a>
+  <a href="#jogos">🎮 Jogos</a>
+  <a href="#sobre">📚 Sobre</a>
+</nav>
+
+<main id="inicio">
+
+<section class="intro container">
+  <div class="section-label">Monitoria · Patologia</div>
+  <h1 id="jogos">🎮 Jogos</h1>
+  <p class="centered">
+    Uma coleção de jogos desenvolvidos para revisar
+    Patologia Bucal de forma mais dinâmica.
+    A cada aula, um novo desafio poderá aparecer por aqui.
+  </p>
+</section>
+
+<section class="games container">
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 01</div>
+      <div class="game-icon">🎮</div>
+      <h2 class="game-title">Jogo da Memória</h2>
+      <p class="game-description">Lesões por Irritativos Crônicos. Encontre o diagnóstico correspondente a cada característica clínica.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🧠 Memória</span>
+        <span class="badge">9 pares</span>
+        <span class="badge">Tecidos moles</span>
+      </div>
+      <a class="play" href="https://sites.google.com/view/patobucal-jogo/in%C3%ADcio" target="_blank" rel="noopener">🎮 Jogar agora</a>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 02</div>
+      <div class="game-icon">🎮</div>
+      <h2 class="game-title">Laudo em Jogo</h2>
+      <p class="game-description">Desordens Orais Potencialmente Malignas. Teste seu olhar clínico antes de fechar o diagnóstico.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🔬 DOPMs</span>
+        <span class="badge">20 casos</span>
+        <span class="badge">Quiz clínico</span>
+      </div>
+      <a class="play" href="https://sites.google.com/view/patobucal-jogo2/in%C3%ADcio" target="_blank" rel="noopener">🎮 Jogar agora</a>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 03</div>
+      <div class="game-icon">🧬</div>
+      <h2 class="game-title">Neoplasias Benignas de Tecidos Moles</h2>
+      <p class="game-description">Fibroma, neurofibroma, hemangioma e outras lesões benignas de tecidos moles.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🧬 Neoplasias benignas</span>
+        <span class="badge">16 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('benignas')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 04</div>
+      <div class="game-icon">💧</div>
+      <h2 class="game-title">Doenças da Imunidade com Manifestações Orais</h2>
+      <p class="game-description">Pênfigo, penfigoide, líquen plano, lúpus e outras condições autoimunes.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🩹 Imunologia</span>
+        <span class="badge">20 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('imunidade')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 05</div>
+      <div class="game-icon">⚠️</div>
+      <h2 class="game-title">Neoplasias Malignas</h2>
+      <p class="game-description">Carcinoma epidermoide, melanoma e sarcomas de importância na cavidade oral.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🧫 Neoplasias malignas</span>
+        <span class="badge">17 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('malignas')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 06</div>
+      <div class="game-icon">🦠</div>
+      <h2 class="game-title">Doenças Infecciosas</h2>
+      <p class="game-description">Bactérias, fungos, protozoários e vírus com manifestações na cavidade oral.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🦠 Infecciosas</span>
+        <span class="badge">19 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('infecciosas')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 07</div>
+      <div class="game-icon">💧</div>
+      <h2 class="game-title">Patologia das Glândulas Salivares</h2>
+      <p class="game-description">Mucocele, adenoma pleomórfico, carcinomas e outras lesões salivares.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">💧 Glândulas salivares</span>
+        <span class="badge">18 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('salivares')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 08</div>
+      <div class="game-icon">🧫</div>
+      <h2 class="game-title">Patologia Epitelial</h2>
+      <p class="game-description">HPV, pigmentações e lesões relacionadas ao tabaco.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🧫 Epitelial</span>
+        <span class="badge">17 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('epitelial')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+  <article class="game-card">
+    <div class="game-top">
+      <div class="game-number">Jogo 09</div>
+      <div class="game-icon">🩺</div>
+      <h2 class="game-title">Manifestações Bucais de Doenças Sistêmicas</h2>
+      <p class="game-description">Diabetes, cardiopatias, doenças renais e digestivas com repercussão bucal.</p>
+    </div>
+    <div class="game-content">
+      <div class="info">
+        <span class="badge">🩺 Sistêmicas</span>
+        <span class="badge">18 questões</span>
+        <span class="badge">Quiz</span>
+      </div>
+      <button class="play" onclick="openQuiz('sistemicas')">🎮 Jogar agora</button>
+    </div>
+  </article>
+
+</section>
+
+<section id="sobre" class="intro container" style="padding-top:20px;">
+  <div class="section-label">Sobre o projeto</div>
+  <h1 class="centered">🦆logia</h1>
+  <p>Olá, meu nome é Antonio Neto, sou discente do curso de odontologia da UEFS. Criei esse site com o objetivo de auxiliar os alunos na fixação e revisão dos conteúdos das aulas de Patologia Oral, tornando o aprendizado mais dinâmico, interativo e divertido.
+
+Espero que a ferramenta contribua para os estudos e que vocês tenham um bom aproveitamento.</p>
+</section>
+
+</main>
+
+<footer class="footer">
+  <strong>🦆logia</strong>
+  <br><br>
+  Patologia Bucal
+  <br>
+  Site criado por Antonio Neto
+  <br><br>
+  🎮 Estude. Jogue. Revise.
+</footer>
+
+<!-- MODAL DO QUIZ -->
+<div class="modal-overlay" id="quizModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeQuiz()">✕</button>
+    <div class="modal-top">
+      <div class="modal-eyebrow">Monitoria de Patologia</div>
+      <h2 id="modalTitle"></h2>
+      <div class="modal-sub" id="modalSub"></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+      <div class="progress-label"><span id="qcount"></span><span id="scount"></span></div>
+    </div>
+    <div class="modal-body">
+      <div id="quizArea">
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Próxima →</button>
+      </div>
+      <div class="result" id="quizResult">
+        <h2>Quiz concluído!</h2>
+        <div class="score" id="finalScore"></div>
+        <p id="finalMsg"></p>
+        <button class="restart-btn" onclick="restartQuiz()">Jogar novamente</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUIZZES = {
+  benignas: {
+    title: "Neoplasias Benignas de Tecidos Moles",
+    subtitle: "Fibroma, Neurofibroma, Hemangioma e mais",
+    questions: [
+      { q:"Qual é a neoplasia mais comum da cavidade oral?", opts:["Lipoma","Fibroma","Neurofibroma","Hemangioma"], a:1, exp:"O fibroma (fibroma de irritação) é a neoplasia mais comum da cavidade oral, mais frequente dos 40 aos 60 anos." },
+      { q:"Qual é a localização mais comum do fibroma na cavidade oral?", opts:["Palato duro","Assoalho bucal","Mucosa jugal","Gengiva"], a:2, exp:"A mucosa jugal é o local mais comum, seguida por lábio, língua e gengiva." },
+      { q:"Qual é o tipo mais comum de neoplasia de nervo periférico?", opts:["Neurilemoma","Neurofibroma","Tumor de células granulares","Leiomioma"], a:1, exp:"O neurofibroma é o tipo mais comum, originado de células de Schwann e fibroblastos perineurais." },
+      { q:"Qual marcador imuno-histoquímico marca o neurofibroma?", opts:["S100","CD34","CD68","Calretinina"], a:1, exp:"CD34 marca o neurofibroma, enquanto S100 marca as células de origem neural." },
+      { q:"Qual neoplasia benigna neural tem origem nas células de Schwann e é encapsulada?", opts:["Neurofibroma","Neurilemoma (Schwannoma)","Fibroma","Lipoma"], a:1, exp:"O neurilemoma (Schwannoma) é encapsulado, ao contrário do neurofibroma." },
+      { q:"O padrão de células em paliçada com corpúsculo de Verocay é chamado de:", opts:["Antoni B","Padrão radiado","Antoni A","Padrão em roseta"], a:2, exp:"Antoni A apresenta células enfileiradas em paliçada delimitando áreas colagênicas (corpúsculo de Verocay)." },
+      { q:"Qual manobra clínica causa isquemia no hemangioma?", opts:["Palpação bidigital","Vitropressão","Percussão","Transiluminação"], a:1, exp:"A vitropressão (compressão com lâmina de vidro) provoca isquemia, auxiliando no diagnóstico." },
+      { q:"Hemangiomas gigantes podem estar associados a qual síndrome, com risco de AVC isquêmico?", opts:["Síndrome de Sturge-Weber","Síndrome PHACE","Síndrome de Klippel-Trenaunay","Síndrome de Maffucci"], a:1, exp:"A síndrome PHACE aumenta o risco de acidente vascular cerebral isquêmico em hemangiomas gigantes." },
+      { q:"Qual tipo de leiomioma é o mais comum na cavidade oral (67-75% dos casos)?", opts:["Leiomioma sólido","Leiomioma epitelioide","Leiomioma vascular (angiomioma)","Leiomioma misto"], a:2, exp:"Os leiomiomas vasculares (angiomiomas/angioleiomiomas) correspondem a 67-75% dos casos orais." },
+      { q:"Onde os linfangiomas orais ocorrem com mais frequência?", opts:["Palato mole","2/3 anteriores da língua","Assoalho bucal","Mucosa jugal"], a:1, exp:"Os linfangiomas orais ocorrem com mais frequência nos 2/3 anteriores da língua." },
+      { q:"Qual substância é usada na escleroterapia do linfangioma?", opts:["Sotradecol","Picibanil (OK-432)","Vimblastina","Ethamolin"], a:1, exp:"A escleroterapia com Picibanil (OK-432) é usada no tratamento do linfangioma, que tem recorrência comum nas formas microcísticas." },
+      { q:"Qual variação histológica do lipoma tem maior componente fibroso associado a adipócitos?", opts:["Angiolipoma","Sialolipoma","Fibrolipoma","Lipoma pleomórfico"], a:2, exp:"O fibrolipoma é composto por maior componente fibroso somado a adipócitos." },
+      { q:"O tumor de células granulares acomete mais frequentemente qual local?", opts:["Palato duro","Dorso da língua","Assoalho bucal","Lábio inferior"], a:1, exp:"O dorso da língua é o local mais acometido, seguido da mucosa jugal, com predileção pelo sexo feminino." },
+      { q:"A histogênese do tumor de células granulares é discutida entre músculo esquelético e:", opts:["Adipócitos","Células de Schwann","Fibroblastos","Melanócitos"], a:1, exp:"Estudos recentes apontam origem a partir das células de Schwann." },
+      { q:"Qual é o local mais afetado pelo fibroma de células gigantes?", opts:["Gengiva superior","Palato","Gengiva inferior","Língua"], a:2, exp:"A gengiva inferior é o local mais afetado, geralmente em pacientes jovens, por volta dos 30 anos." },
+      { q:"Histologicamente, o fibroma de células gigantes se caracteriza pela presença de:", opts:["Pérolas córneas","Fibroblastos estrelados multinucleados","Corpúsculos de Verocay","Células de Tzanck"], a:1, exp:"Numerosos fibroblastos grandes, de formato estrelado e com vários núcleos são característicos dessa lesão." }
+    ],
+    low:"Continue revisando as neoplasias benignas.",
+    ok:"Bom começo, vale revisar os quadros clínicos.",
+    good:"Muito bom! Só faltam alguns detalhes.",
+    perfect:"Gabarito perfeito! Domínio total do conteúdo."
+  },
+  imunidade: {
+    title: "Doenças da Imunidade com Manifestações Orais",
+    subtitle: "Pênfigo, penfigoide, líquen plano, lúpus e mais",
+    questions: [
+      { q:"O pênfigo vulgar é causado por autoanticorpos contra quais glicoproteínas?", opts:["Desmogleína 3 e desmogleína 1","Colágeno tipo IV","Laminina 332","Integrina alfa-6"], a:0, exp:"Os autoanticorpos são dirigidos contra a desmogleína 3 e a desmogleína 1, componentes dos desmossomos." },
+      { q:"Qual sinal clínico é positivo no pênfigo, caracterizado pela formação de bolha em pele normal após pressão?", opts:["Sinal de Koebner","Sinal de Nikolsky","Sinal de Auspitz","Sinal de Darier"], a:1, exp:"O sinal de Nikolsky positivo indica a formação de bolha em pele normal após apreensão do epitélio." },
+      { q:"Qual é o exame padrão-ouro para diagnóstico do pênfigo?", opts:["Biópsia com H&E apenas","Imunofluorescência direta","Sorologia para HSV","Citologia esfoliativa"], a:1, exp:"A imunofluorescência direta em tecido é o padrão-ouro para o diagnóstico do pênfigo." },
+      { q:"No pênfigo, a imunofluorescência indireta mostra um padrão de fluorescência em forma de:", opts:["Linha na camada basal","Rede","Pontos isolados","Faixa contínua"], a:1, exp:"No pênfigo, a fluorescência se mostra como uma rede; no penfigoide, se limita à camada basal." },
+      { q:"Qual é o anticorpo monoclonal contra linfócitos B usado no tratamento de casos refratários de pênfigo?", opts:["Rituximab","Infliximabe","Omalizumabe","Trastuzumabe"], a:0, exp:"O Rituximab é um anticorpo monoclonal contra linfócitos B utilizado no tratamento do pênfigo." },
+      { q:"No penfigoide das membranas mucosas, em qual nível ocorre a separação/fenda?", opts:["Intraepitelial, acima da camada basal","Subepitelial, entre epitélio e conjuntivo","Na camada córnea","Na lâmina própria profunda"], a:1, exp:"No penfigoide há fenda subepitelial, com o epitélio completamente separado do tecido conjuntivo." },
+      { q:"Como são chamadas as aderências cicatriciais entre a conjuntiva bulbar e palpebral no penfigoide?", opts:["Sinéquias","Simbléfaros","Pterígios","Ptoses"], a:1, exp:"As aderências entre a conjuntiva bulbar e palpebral são chamadas de simbléfaros." },
+      { q:"Se não reconhecido e tratado, o envolvimento ocular no penfigoide pode resultar em:", opts:["Estrabismo","Cegueira","Miose permanente","Daltonismo"], a:1, exp:"As cicatrizes na mucosa conjuntival invariavelmente resultam em cegueira, a menos que sejam tratadas." },
+      { q:"Qual infecção é frequentemente identificada como precedente do eritema multiforme?", opts:["Herpes simples","Tuberculose","Sífilis","Candidíase"], a:0, exp:"O herpes simples (ou Mycoplasma pneumoniae) é uma infecção frequentemente precedente ao eritema multiforme." },
+      { q:"O que caracteriza as clássicas lesões 'em alvo' da pele no eritema multiforme?", opts:["Placas descamativas lineares","Anéis eritematosos circulares e concêntricos","Vesículas agrupadas em cacho","Pústulas foliculares"], a:1, exp:"As lesões em alvo se apresentam como anéis eritematosos circulares e concêntricos, assemelhando-se a um alvo." },
+      { q:"Qual é a principal diferença entre síndrome de Stevens-Johnson e necrólise epidérmica tóxica?", opts:["A idade dos pacientes apenas","O grau de envolvimento da superfície corporal pela pele","O tipo de infecção causadora","A presença de lesões orais"], a:1, exp:"A SSJ acomete até 10% da superfície corporal, enquanto a NET acomete mais de 30%." },
+      { q:"Qual é a taxa de mortalidade aproximada da necrólise epidérmica tóxica (NET)?", opts:["1 a 5%","10 a 15%","25 a 30%","50 a 60%"], a:2, exp:"A taxa de mortalidade da NET é de 25 a 30%, bem maior que a da SSJ (1 a 5%)." },
+      { q:"O eritema migratório afeta principalmente qual estrutura oral?", opts:["Palato mole","Língua (dois terços anteriores do dorso)","Assoalho bucal","Mucosa jugal"], a:1, exp:"As lesões de eritema migratório são observadas nos dois terços anteriores da superfície dorsal da língua." },
+      { q:"No eritema migratório, o eritema central é causado pela atrofia de quais papilas linguais?", opts:["Papilas fungiformes","Papilas filiformes","Papilas circunvaladas","Papilas foliadas"], a:1, exp:"O eritema é devido à atrofia das papilas filiformes, circundadas por bordas branco-amareladas elevadas." },
+      { q:"Qual é a forma clínica mais comum do líquen plano oral, com estrias de Wickham?", opts:["Erosiva","Atrófica","Reticular","Bolhosa"], a:2, exp:"A forma reticular é a mais comum, com placas lineares brancas em aspecto de rede (estrias de Wickham)." },
+      { q:"Qual estrutura histológica do líquen plano representa um corpo apoptótico na camada basal?", opts:["Corpúsculo de Verocay","Corpúsculo de Civatte","Célula de Tzanck","Corpúsculo de Russell"], a:1, exp:"O corpúsculo de Civatte é um ceratinócito em degeneração (corpo apoptótico) na camada basal." },
+      { q:"A doença do enxerto contra o hospedeiro (GVHD) apresenta características clínicas e histológicas semelhantes a qual outra condição?", opts:["Pênfigo vulgar","Eritema migratório","Líquen plano","Estomatite nicotínica"], a:2, exp:"A GVHD é clínica e histologicamente idêntica ao líquen plano, causada pelos imunossupressores utilizados." },
+      { q:"Qual medicamento usado na GVHD é contraindicado em mulheres gestantes ou em idade fértil pelo risco de gravidez?", opts:["Ciclosporina","Prednisona","Talidomida","Tacrolimo"], a:2, exp:"A talidomida não pode ser usada em mulheres gestantes ou em idade fértil pelo alto risco teratogênico." },
+      { q:"Qual exantema facial característico ocorre em 40 a 50% dos casos de lúpus eritematoso sistêmico?", opts:["Exantema morbiliforme","Exantema em 'asa de borboleta'","Exantema petequial","Exantema vesicular"], a:1, exp:"O exantema malar em padrão de 'asa de borboleta' ocorre em 40 a 50% dos casos de lúpus." },
+      { q:"Qual é o exame padrão-ouro para o diagnóstico do lúpus eritematoso sistêmico?", opts:["Biópsia com H&E","Imunofluorescência direta","Hemograma completo","Cultura de tecido"], a:1, exp:"A imunofluorescência direta é o padrão-ouro para o diagnóstico do lúpus eritematoso sistêmico." }
+    ],
+    low:"Vale revisar os mecanismos autoimunes e os achados histopatológicos.",
+    ok:"Bom começo — revise os níveis de clivagem e o tratamento.",
+    good:"Muito bom! Reforce os diagnósticos diferenciais entre bolhosas.",
+    perfect:"Perfeito! Domínio completo das doenças imunológicas orais."
+  },
+  malignas: {
+    title: "Neoplasias Malignas",
+    subtitle: "Carcinoma epidermoide, melanoma, sarcomas",
+    questions: [
+      { q:"O carcinoma epidermoide representa que percentual das neoplasias malignas orais?", opts:["50%","70%","Mais de 90%","30%"], a:2, exp:"O carcinoma epidermoide (espinocelular) representa mais de 90% das neoplasias malignas orais." },
+      { q:"O etanol das bebidas alcoólicas é metabolizado em qual composto cancerígeno?", opts:["Formaldeído","Acetaldeído","Benzeno","Nitrosamina"], a:1, exp:"O etanol é metabolizado em acetaldeído, um conhecido agente cancerígeno." },
+      { q:"Qual subtipo de HPV está associado a um risco de quase 4x maior de câncer oral?", opts:["HPV 6","HPV 11","HPV 16","HPV 18"], a:2, exp:"A detecção de HPV 16 está associada a risco de quase quatro vezes maior de câncer oral." },
+      { q:"Qual é a localização mais comum do carcinoma intraoral?", opts:["Palato duro","Borda lateral de língua","Gengiva","Área retromolar"], a:1, exp:"O carcinoma de língua responde por mais de 50% dos casos intraorais, na borda lateral." },
+      { q:"Cerca de 90% das lesões de carcinoma de lábio ocorrem em qual local?", opts:["Lábio superior","Comissura labial","Lábio inferior","Vermelhão bilateral"], a:2, exp:"Quase 90% das lesões estão localizadas no lábio inferior, que recebe mais raios UV." },
+      { q:"Qual forma de apresentação do carcinoma epidermoide tem superfície vegetante, papilífera e dura à palpação?", opts:["Endofítica","Exofítica","Leucoplásica","Eritroplásica"], a:1, exp:"A forma exofítica apresenta superfície irregular, vegetante e é dura à palpação." },
+      { q:"Qual achado histopatológico é característico do carcinoma epidermoide, relacionado à queratinização?", opts:["Corpúsculo de Verocay","Pérola córnea","Grânulo sulfúrico","Célula de Tzanck"], a:1, exp:"A pérola córnea (pérola de ceratina) é um achado clássico do carcinoma epidermoide." },
+      { q:"O carcinoma verrucoso é uma variante de baixo grau de qual neoplasia?", opts:["Melanoma","Fibrossarcoma","Carcinoma epidermoide","Sarcoma de Kaposi"], a:2, exp:"O carcinoma verrucoso é uma variante de baixo grau do carcinoma epidermoide oral." },
+      { q:"O carcinoma verrucoso é encontrado predominantemente em qual faixa etária?", opts:["20 a 30 anos","40 a 50 anos","65 a 70 anos","Acima de 80 anos"], a:2, exp:"É encontrado predominantemente em homens mais velhos, de 65 a 70 anos." },
+      { q:"O melanoma é uma neoplasia maligna de origem:", opts:["Epitelial","Melanocítica","Muscular lisa","Vascular"], a:1, exp:"O melanoma é uma neoplasia maligna de origem melanocítica, o terceiro câncer mais comum da pele." },
+      { q:"Qual é a forma mais comum de melanoma oral?", opts:["Superficial disseminante","Nodular","Lentiginoso maligno","Lentiginoso acral e da mucosa"], a:3, exp:"O melanoma lentiginoso acral e da mucosa é a forma mais comum de melanoma oral." },
+      { q:"Quais genes apresentam mutações associadas ao melanoma?", opts:["TP53, RB1, MYC","MAPK, BRAF e KIT","APC, KRAS","EGFR, ALK"], a:1, exp:"Mutações nos genes MAPK, BRAF e KIT estão associadas ao desenvolvimento do melanoma." },
+      { q:"O fibrossarcoma apresenta histologicamente um padrão de células fusiformes descrito como:", opts:["Roda de leme","Espinha de peixe","Orelha de Mickey Mouse","Corpúsculo de Verocay"], a:1, exp:"Fascículos de células fusiformes formam um padrão de 'espinha de peixe' no fibrossarcoma." },
+      { q:"O sarcoma de Kaposi é causado pela infecção com qual vírus?", opts:["EBV (HHV-4)","HSV (HHV-1)","HHV-8 (KSHV)","VZV"], a:2, exp:"O sarcoma de Kaposi é causado pelo herpes-vírus humano 8 (HHV8 ou KSHV)." },
+      { q:"Qual apresentação do sarcoma de Kaposi está relacionada à AIDS, com lesões bucais comuns?", opts:["Clássica","Endêmica","Iatrogênica","Epidêmica"], a:3, exp:"O tipo epidêmico está relacionado à AIDS, com lesões multifocais e bucais comuns em pacientes jovens." },
+      { q:"Qual é a sobrevida em 5 anos do leiomiossarcoma oral?", opts:["20%","55%","80%","95%"], a:1, exp:"A sobrevida em 5 anos do leiomiossarcoma é de aproximadamente 55%, com prognóstico pobre." },
+      { q:"Cerca de 50% dos casos orais de leiomiossarcoma ocorrem em qual estrutura?", opts:["Glândulas salivares","Ossos maxilares","Mucosa jugal","Língua"], a:1, exp:"50% dos casos orais de leiomiossarcoma ocorrem nos ossos maxilares." }
+    ],
+    low:"Vale revisar etiologia e características clínicas das malignas.",
+    ok:"Bom começo — revise os subtipos e tratamentos.",
+    good:"Muito bom! Reforce os detalhes histopatológicos.",
+    perfect:"Excelente! Domínio completo das neoplasias malignas."
+  },
+  infecciosas: {
+    title: "Doenças Infecciosas",
+    subtitle: "Bactérias, fungos, protozoários e vírus na boca",
+    questions: [
+      { q:"Qual é o agente causador da sífilis?", opts:["Mycobacterium tuberculosis","Treponema pallidum","Actinomyces israelii","Candida albicans"], a:1, exp:"A sífilis é causada pelo Treponema pallidum, transmitido principalmente por contato sexual." },
+      { q:"Qual estágio da sífilis é caracterizado por cancro solitário e indolor?", opts:["Sífilis primária","Sífilis secundária","Sífilis terciária","Sífilis congênita"], a:0, exp:"A sífilis primária apresenta cancro solitário, com ulceração indolor na área de inoculação." },
+      { q:"A tríade de Hutchinson (sífilis congênita) inclui dentes de Hutchinson, ceratite intersticial e:", opts:["Cegueira","Surdez","Anosmia","Paralisia facial"], a:1, exp:"A tríade de Hutchinson é composta por dentes de Hutchinson, ceratite ocular intersticial e surdez." },
+      { q:"Qual é o tratamento de eleição para a sífilis?", opts:["Doxiciclina","Fluconazol","Penicilina","Aciclovir"], a:2, exp:"A penicilina é o tratamento de eleição para todos os estágios da sífilis." },
+      { q:"Qual é o agente causador da tuberculose?", opts:["Mycobacterium tuberculosis","Treponema pallidum","Actinomyces israelii","Paracoccidioides brasiliensis"], a:0, exp:"A tuberculose é causada pelo Mycobacterium tuberculosis." },
+      { q:"Qual coloração especial é usada para identificar micobactérias na tuberculose?", opts:["Grocott","Ziehl-Neelsen","PAS","Giemsa"], a:1, exp:"A coloração de Ziehl-Neelsen (ou outra acidorresistente) é usada para demonstrar a micobactéria." },
+      { q:"Qual bactéria causa a actinomicose?", opts:["Actinomyces israelii","Streptococcus mutans","Treponema pallidum","Mycobacterium leprae"], a:0, exp:"A actinomicose é causada por Actinomyces israelii, bactéria anaeróbia gram-positiva filamentosa." },
+      { q:"Qual achado na secreção é característico da actinomicose?", opts:["Pérolas de ceratina","Grânulos sulfúricos","Corpúsculos de Verocay","Células de Tzanck"], a:1, exp:"Os grânulos sulfúricos representam colônias de bactérias e sustentam o diagnóstico de actinomicose." },
+      { q:"Qual espécie de cândida é a mais associada às infecções orais?", opts:["Candida glabrata","Candida krusei","Candida albicans","Candida tropicalis"], a:2, exp:"A Candida albicans é a espécie mais associada à candidose, a infecção fúngica oral mais comum." },
+      { q:"Qual forma de candidose se apresenta como placa branca destacável ao raspar?", opts:["Candidose eritematosa","Candidose pseudomembranosa","Candidose hiperplásica crônica","Candidose mucocutânea"], a:1, exp:"Qualquer lesão branca destacável é considerada candidose pseudomembranosa." },
+      { q:"Como é conhecida a atrofia papilar central na linha média do dorso da língua?", opts:["Queilite angular","Glossite romboide mediana","Língua geográfica","Glossite luética"], a:1, exp:"A atrofia papilar central (glossite romboide mediana) é uma zona eritematosa bem demarcada no dorso posterior da língua." },
+      { q:"Qual fungo causa a paracoccidioidomicose?", opts:["Paracoccidioides brasiliensis","Candida albicans","Histoplasma capsulatum","Aspergillus niger"], a:0, exp:"A paracoccidioidomicose é causada pelo Paracoccidioides brasiliensis, mais comum em trabalhadores rurais." },
+      { q:"Qual aspecto histológico clássico (H&E) é descrito na paracoccidioidomicose?", opts:["Espinha de peixe","Orelha do Mickey Mouse","Roseta radiada","Pérola córnea"], a:1, exp:"O aspecto de 'orelha do Mickey Mouse' representa o brotamento do fungo na coloração H&E." },
+      { q:"A leishmaniose é transmitida pela picada de qual vetor?", opts:["Mosquito Aedes","Mosquito-palha (flebotomíneo)","Carrapato","Piolho"], a:1, exp:"A leishmaniose é transmitida pela picada de mosquitos-palha (flebotomíneos)." },
+      { q:"Na cavidade oral, qual é a localização mais comum das lesões de leishmaniose?", opts:["Língua","Palato","Assoalho bucal","Gengiva"], a:1, exp:"O palato é a localização mais comum das lesões orais de leishmaniose, com aspecto úlcero-vegetante." },
+      { q:"Qual vírus é responsável pela gengivoestomatite herpética aguda?", opts:["VZV","HSV (herpes simples)","EBV","HHV-8"], a:1, exp:"A gengivoestomatite herpética aguda é o padrão mais comum de infecção primária sintomática pelo HSV." },
+      { q:"Quais células acantolíticas são características da citologia do herpes?", opts:["Células de Tzanck","Células de Reed-Sternberg","Células de Langhans","Células gigantes multinucleadas de corpo estranho"], a:0, exp:"As células de Tzanck são células epiteliais acantolíticas vistas na infecção herpética." },
+      { q:"O herpes-zóster ocorre pela reativação de qual vírus, latente no gânglio da raiz dorsal?", opts:["HSV-1","EBV","VZV (vírus varicela-zóster)","CMV"], a:2, exp:"O herpes-zóster ocorre após reativação do VZV, que estabelece latência no gânglio da espinha dorsal." },
+      { q:"O vírus Epstein-Barr (EBV) está associado à mononucleose infecciosa, leucoplasia pilosa e a qual neoplasia?", opts:["Sarcoma de Kaposi","Linfoma de Burkitt","Melanoma","Fibrossarcoma"], a:1, exp:"O EBV está associado à leucoplasia pilosa oral, linfoma de Burkitt e carcinoma nasofaríngeo." }
+    ],
+    low:"Vale revisar os agentes etiológicos e diagnósticos.",
+    ok:"Bom começo — revise os quadros clínicos e tratamentos.",
+    good:"Muito bom! Reforce alguns detalhes clínicos.",
+    perfect:"Perfeito! Você domina as doenças infecciosas."
+  },
+  salivares: {
+    title: "Patologia das Glândulas Salivares",
+    subtitle: "Mucocele, adenoma pleomórfico, carcinomas e mais",
+    questions: [
+      { q:"A mucocele resulta da ruptura de qual estrutura, com extravasamento de mucina?", opts:["Ácino glandular","Ducto de glândula salivar","Cápsula da glândula","Nervo facial"], a:1, exp:"A mucocele resulta da ruptura de um ducto de glândula salivar e do extravasamento de mucina para os tecidos moles." },
+      { q:"Qual é o sítio mais acometido pela mucocele?", opts:["Lábio superior","Palato duro","Lábio inferior","Língua"], a:2, exp:"O lábio inferior é o sítio mais acometido pela mucocele, embora possa ocorrer em outras regiões." },
+      { q:"Como é chamada a mucocele que ocorre no assoalho da boca?", opts:["Sialocele","Rânula","Mucocele profunda","Sialólito"], a:1, exp:"Rânula é o termo usado para mucoceles que ocorrem no assoalho da boca." },
+      { q:"Qual característica do tratamento da rânula é frequentemente observada?", opts:["Cura espontânea garantida","Recidiva frequente","Não requer tratamento","Resolução em 24h"], a:1, exp:"A rânula tem recidiva frequente, sendo tratada por marsupialização ou remoção da glândula sublingual." },
+      { q:"Qual glândula salivar maior tem maior tendência à formação de sialólitos?", opts:["Parótida","Sublingual","Submandibular","Glândulas menores do lábio"], a:2, exp:"A glândula submandibular, por seu ducto longo e tortuoso e excreção mucoide, tem maior tendência à formação de cálculo." },
+      { q:"Como é chamada a inflamação do parênquima glandular?", opts:["Sialodoquite","Sialodenite","Sialolitíase","Sialometaplasia"], a:1, exp:"Sialodenite é a inflamação do parênquima, enquanto sialodoquite é a inflamação dos ductos salivares." },
+      { q:"Qual é a neoplasia de glândula salivar mais comum?", opts:["Tumor de Warthin","Carcinoma mucoepidermoide","Adenoma pleomórfico","Carcinoma adenoide cístico"], a:2, exp:"O adenoma pleomórfico é a neoplasia de glândula salivar mais comum." },
+      { q:"Qual é o local mais afetado pelo adenoma pleomórfico?", opts:["Parótida","Palato","Submandibular","Mucosa jugal"], a:0, exp:"A parótida é o local mais afetado, seguida do palato e da glândula submandibular." },
+      { q:"No adenoma pleomórfico, quais células adquirem fenótipo plasmocitoide ao redor dos ductos?", opts:["Células epiteliais ductais","Células mioepiteliais","Fibroblastos","Células oncocíticas"], a:1, exp:"As células mioepiteliais adquirem fenótipo plasmocitoide, com núcleo rechaçado para a periferia." },
+      { q:"Qual é a segunda neoplasia benigna mais comum de glândulas salivares?", opts:["Tumor de Warthin","Mioepitelioma","Oncocitoma","Adenoma basocelular"], a:0, exp:"O Tumor de Warthin (cistoadenoma linfomatoso papilífero) é a segunda neoplasia benigna mais comum." },
+      { q:"O Tumor de Warthin ocorre quase exclusivamente em qual glândula?", opts:["Submandibular","Sublingual","Parótida","Glândulas labiais"], a:2, exp:"É quase exclusivo da glândula parótida, com mais frequência na cauda, próximo ao ângulo da mandíbula." },
+      { q:"Tabagistas têm quantas vezes mais chances de desenvolver o Tumor de Warthin?", opts:["2x","4x","8x","12x"], a:2, exp:"Tabagistas têm 8 vezes mais chances de serem acometidos pelo Tumor de Warthin." },
+      { q:"Qual é a neoplasia maligna de glândula salivar mais comum?", opts:["Carcinoma adenoide cístico","Carcinoma mucoepidermoide","Adenocarcinoma polimorfo","Carcinoma epidermoide"], a:1, exp:"O carcinoma mucoepidermoide é uma das neoplasias malignas de glândula salivar mais comuns." },
+      { q:"O carcinoma mucoepidermoide apresenta três tipos celulares: escamosas, produtoras de muco e:", opts:["Mioepiteliais","Intermediárias","Basaloides","Oncocíticas"], a:1, exp:"Os três tipos celulares são: células escamosas/epidermoides, produtoras de muco e do tipo intermediário." },
+      { q:"Qual tumor maligno agressivo apresenta os padrões histológicos tubular, cribiforme e sólido?", opts:["Carcinoma mucoepidermoide","Carcinoma adenoide cístico","Adenocarcinoma polimorfo","Adenoma pleomórfico"], a:1, exp:"O carcinoma adenoide cístico apresenta esses três padrões, sendo o sólido o mais agressivo." },
+      { q:"Qual padrão histológico do carcinoma adenoide cístico tem o comportamento mais agressivo?", opts:["Tubular","Cribiforme","Sólido","Papilífero"], a:2, exp:"O padrão sólido, com pouco ducto e possível pleomorfismo, é o mais agressivo." },
+      { q:"Qual tumor maligno é quase exclusivo de glândulas salivares menores e tem bom prognóstico?", opts:["Carcinoma adenoide cístico","Adenocarcinoma polimorfo","Carcinoma mucoepidermoide","Carcinoma epidermoide"], a:1, exp:"O adenocarcinoma polimorfo é quase exclusivo de glândulas salivares menores, com baixo risco de metástase." },
+      { q:"No adenocarcinoma polimorfo, qual arranjo celular é observado na periferia das ilhas?", opts:["Paliçada","Fila indiana","Roseta","Ninhos sólidos"], a:1, exp:"Observa-se a proliferação de células enfileiradas em 'fila indiana' na periferia das ilhas tumorais." }
+    ],
+    low:"Vale revisar os quadros clínicos e histopatológicos das glândulas salivares.",
+    ok:"Bom começo — revise os padrões histológicos.",
+    good:"Muito bom! Reforce os diagnósticos diferenciais.",
+    perfect:"Perfeito! Domínio total das lesões salivares."
+  },
+  epitelial: {
+    title: "Patologia Epitelial",
+    subtitle: "HPV, pigmentações e lesões relacionadas ao tabaco",
+    questions: [
+      { q:"O papiloma oral é induzido por quais subtipos de HPV?", opts:["HPV 16 e 18","HPV 6 e 11","HPV 2 e 4","HPV 31 e 33"], a:1, exp:"O papiloma é induzido pelo HPV 6 e 11, resultando em lesão papilar ou verruciforme." },
+      { q:"Qual é a lesão de tecido mole mais comum no palato?", opts:["Fibroma","Papiloma","Condiloma acuminado","Verruga vulgar"], a:1, exp:"O papiloma é a lesão de tecido mole mais comum no palato." },
+      { q:"Como são chamadas as células claras alteradas pelo HPV, com núcleo picnótico?", opts:["Células de Tzanck","Coilócitos","Células de Langhans","Melanófagos"], a:1, exp:"Coilócitos são células claras alteradas pelo vírus, com núcleo picnótico, achado histológico associado ao HPV." },
+      { q:"Qual subtipo de HPV é o mais frequente na verruga vulgar?", opts:["HPV 6","HPV 2","HPV 16","HPV 11"], a:1, exp:"O HPV tipo 2 é o mais frequente na verruga vulgar, embora outros tipos possam ser encontrados." },
+      { q:"Qual é o sítio mais envolvido pela verruga vulgar no corpo?", opts:["Pele das mãos","Lábio inferior","Palato duro","Língua"], a:0, exp:"A pele das mãos é o sítio mais envolvido; na boca aparece na borda do vermelhão, mucosa labial ou língua." },
+      { q:"O condiloma acuminado, quando identificado em crianças, pode ser um indicador de:", opts:["Deficiência vitamínica","Abuso sexual","Alergia alimentar","Infecção respiratória"], a:1, exp:"O condiloma acuminado pode ser um indicador de abuso sexual quando identificado em crianças." },
+      { q:"Qual é o período de incubação do condiloma acuminado?", opts:["1 a 3 dias","1 a 3 semanas","1 a 3 meses","1 a 3 anos"], a:2, exp:"O período de incubação do condiloma acuminado é de um a três meses." },
+      { q:"A mácula melanótica oral ocorre com mais frequência em qual sítio?", opts:["Vermelhão do lábio inferior","Palato mole","Assoalho bucal","Gengiva vestibular"], a:0, exp:"O vermelhão do lábio inferior é o sítio mais envolvido pela mácula melanótica oral." },
+      { q:"Qual síndrome está associada a pólipos hamartomatosos e manchas escuras nos lábios?", opts:["Síndrome de McCune-Albright","Síndrome de Peutz-Jeghers","Síndrome de Laugier-Hunziker","Doença de Addison"], a:1, exp:"A síndrome de Peutz-Jeghers causa pólipos hamartomatosos no aparelho digestivo e manchas escuras nos lábios e mucosa oral." },
+      { q:"Qual doença endócrina, com produção insuficiente de hormônios adrenais, causa hiperpigmentação de pele e mucosas?", opts:["Diabetes mellitus","Doença de Addison","Hipotireoidismo","Síndrome de Cushing"], a:1, exp:"A Doença de Addison é caracterizada pela produção insuficiente de hormônios esteroides adrenais, com hiperpigmentação como manifestação." },
+      { q:"Por que máculas pigmentadas no palato e mucosa alveolar da maxila devem ser enviadas para exame histopatológico?", opts:["Risco de infecção fúngica","Predileção do melanoma oral por esses locais","Associação com cárie","Relação com xerostomia"], a:1, exp:"O melanoma oral tem predileção pelo palato e mucosa alveolar da maxila, por isso máculas pigmentadas nesses locais merecem investigação." },
+      { q:"O nevo melanocítico adquirido, o mais comum, deriva de qual estrutura embrionária?", opts:["Ectoderma superficial","Crista neural","Mesoderma","Endoderma"], a:1, exp:"O nevo melanocítico adquirido representa proliferação de células névicas derivadas da crista neural." },
+      { q:"Qual tipo de nevo apresenta células névicas restritas apenas ao epitélio?", opts:["Nevo composto","Nevo intramucoso","Nevo juncional","Nevo azul"], a:2, exp:"No nevo juncional, as células névicas estão presentes apenas no epitélio, no nível da camada basal." },
+      { q:"Qual tipo de nevo está situado mais profundamente no tecido conjuntivo, com células fusiformes?", opts:["Nevo juncional","Nevo composto","Nevo azul","Nevo intramucoso"], a:2, exp:"O nevo azul está situado mais profundamente e apresenta células fusiformes amarronzadas." },
+      { q:"A estomatite nicotínica está mais associada a qual forma de fumar?", opts:["Cigarro comum","Cachimbo","Charuto","Tabaco de mascar"], a:1, exp:"O cachimbo parece gerar mais calor no palato do que outras formas de fumar, causando a estomatite nicotínica." },
+      { q:"Após a cessação do fumo, em quanto tempo o palato costuma retornar ao normal na estomatite nicotínica?", opts:["24 horas","1 a 2 semanas","3 meses","1 ano"], a:1, exp:"O palato retorna ao normal dentro de uma ou duas semanas após a cessação do tabagismo." },
+      { q:"A queratose da bolsa do tabaco é causada pelo uso crônico de qual tipo de tabaco?", opts:["Cigarro industrializado","Charuto","Tabaco sem fumaça (rapé)","Cigarrilha"], a:2, exp:"É causada pelo uso crônico de tabaco sem fumaça (rapé seco ou úmido) colocado na mucosa oral." }
+    ],
+    low:"Vale revisar as lesões associadas ao HPV e ao tabaco.",
+    ok:"Bom começo — revise as características histológicas.",
+    good:"Muito bom! Reforce os diagnósticos diferenciais.",
+    perfect:"Excelente! Domínio completo da patologia epitelial."
+  },
+  sistemicas: {
+    title: "Manifestações Bucais de Doenças Sistêmicas",
+    subtitle: "Diabetes, cardiopatias, doenças renais e digestivas",
+    questions: [
+      { q:"Qual é a manifestação bucal mais comum em pacientes com diabetes mellitus?", opts:["Candidose","Doença periodontal","Síndrome da boca ardente","Xerostomia"], a:1, exp:"A doença periodontal é a manifestação bucal mais comum em portadores de DM, e sem tratamento pode piorar o controle glicêmico." },
+      { q:"O DM tipo 1 é causado pela destruição autoimune de quais células?", opts:["Células alfa do pâncreas","Células beta do pâncreas","Hepatócitos","Células da adeno-hipófise"], a:1, exp:"O DM tipo 1 é causado pela deficiência absoluta de insulina, resultante da destruição autoimune das células beta pancreáticas." },
+      { q:"Qual anestésico local é indicado em urgências para diabéticos descompensados, por não alterar a glicemia?", opts:["Lidocaína com epinefrina","Felipressina (prilocaína 3%)","Mepivacaína sem vasoconstritor","Articaína com epinefrina"], a:1, exp:"A felipressina (associada à prilocaína 3%) não altera glicemia, frequência cardíaca ou pressão arterial." },
+      { q:"Abaixo de qual valor de glicemia capilar considera-se crise de hipoglicemia?", opts:["100-120 mg/dl","80-100 mg/dl","50-70 mg/dl","30-40 mg/dl"], a:2, exp:"Glicemia capilar abaixo de 50-70 mg/dl caracteriza a crise de hipoglicemia, com risco de perda de consciência abaixo de 40 mg/dl." },
+      { q:"Qual antibiótico é utilizado na profilaxia de endocardite infecciosa antes de procedimentos odontológicos?", opts:["Azitromicina","Amoxicilina","Metronidazol","Ciprofloxacino"], a:1, exp:"A profilaxia é feita com 2g de amoxicilina (adultos) 30 a 60 minutos antes do procedimento." },
+      { q:"Qual bactéria está associada à maior mortalidade em casos de endocardite infecciosa?", opts:["Streptococcus mutans","Staphylococcus aureus","Escherichia coli","Candida albicans"], a:1, exp:"A mortalidade é maior quando a endocardite infecciosa está relacionada ao Staphylococcus aureus." },
+      { q:"Em pacientes hipertensos, qual classe de medicamentos pode elevar a pressão arterial por bloquear prostaglandinas?", opts:["Antibióticos","Anti-inflamatórios não esteroidais (AINEs)","Anestésicos tópicos","Antifúngicos"], a:1, exp:"Os AINEs bloqueiam prostaglandinas, diminuindo vasodilatação e excreção de sódio, o que pode elevar a pressão arterial." },
+      { q:"Quais dispositivos NÃO são recomendados em pacientes com marcapasso?", opts:["Ultrassom para raspagem","Bisturi elétrico, localizador apical e TENS","Radiografia periapical","Sonda periodontal"], a:1, exp:"Bisturi elétrico, localizadores apicais e TENS não são recomendados; o ultrassom para raspagem pode ser utilizado." },
+      { q:"Em pacientes com insuficiência cardíaca, qual posição da cadeira odontológica é recomendada?", opts:["Totalmente reclinada (Trendelenburg)","Semi-supina ou vertical","Decúbito lateral","Deitado com pernas elevadas"], a:1, exp:"A posição semi-supina ou vertical reduz a congestão pulmonar e evita hipotensão ortostática." },
+      { q:"Em pacientes anticoagulados que sangram durante procedimentos, por que usar anestésico com vasoconstritor?", opts:["Para acelerar a anestesia","Para controle inicial do sangramento","Para evitar infecção","Para reduzir a dose de anestésico"], a:1, exp:"A presença de vasoconstritor no anestésico é importante para o controle inicial do sangramento nesses pacientes." },
+      { q:"Qual complicação renal está relacionada à deficiência de eritropoietina?", opts:["Anemia","Osteodistrofia renal","Coagulopatia","Imunodeficiência"], a:0, exp:"A anemia se desenvolve secundariamente à deficiência de eritropoietina, glicoproteína produzida pelo rim." },
+      { q:"Por que se deve evitar atender pacientes em hemodiálise no mesmo dia da sessão?", opts:["Falta de tempo do paciente","Risco de sangramento por heparina, desequilíbrio eletrolítico e cansaço","Interação com anestésico local","Necessidade de jejum"], a:1, exp:"Existe risco de sangramento aumentado (heparina), desequilíbrios eletrolíticos e cansaço do paciente após a hemodiálise." },
+      { q:"Qual medicamento é contraindicado em pacientes nefropatas por diminuir ainda mais a adesão plaquetária?", opts:["Paracetamol","Ácido acetilsalicílico (AAS)","Amoxicilina","Clorexidina"], a:1, exp:"O AAS é contraindicado pois o paciente nefropata já apresenta diminuição da adesão plaquetária pelo acúmulo de toxinas urêmicas." },
+      { q:"Qual classe de antibióticos deve ser evitada em pacientes com doença renal?", opts:["Penicilinas","Cefalosporinas","Tetraciclinas","Macrolídeos"], a:2, exp:"Os antibióticos derivados de tetraciclina devem ser evitados em pacientes nefropatas." },
+      { q:"Na Doença de Crohn, qual manifestação oral rara se apresenta com pústulas amareladas lineares sobre mucosa eritematosa?", opts:["Queilite granulomatosa","Pioestomatite vegetante","Estomatite urêmica","Glossite atrófica"], a:1, exp:"A pioestomatite vegetante é uma expressão incomum da doença intestinal inflamatória, com pústulas amareladas lineares." },
+      { q:"A doença celíaca é uma reação autoimune desencadeada pela ingestão de qual proteína?", opts:["Lactose","Glúten","Caseína","Colágeno"], a:1, exp:"A doença celíaca é desencadeada pela ingestão de glúten, proteína presente em alguns cereais." },
+      { q:"Qual autoanticorpo tem alta sensibilidade e especificidade no diagnóstico sorológico da doença celíaca?", opts:["Anti-Ro/SSA","Anti-transglutaminase","Anti-DNA","Fator reumatoide"], a:1, exp:"Os autoanticorpos contra a transglutaminase são detectados em mais de 95% dos indivíduos celíacos." },
+      { q:"Na doença do refluxo gastroesofágico, qual mecanismo permite a passagem de conteúdo gástrico ao esôfago?", opts:["Espasmo do esfíncter superior","Relaxamento involuntário do esfíncter inferior do esôfago","Hipertonia do cárdia","Aumento da motilidade intestinal"], a:1, exp:"O relaxamento muscular involuntário do esfíncter inferior do esôfago permite a passagem do conteúdo gástrico." }
+    ],
+    low:"Vale revisar o manejo odontológico de cada condição sistêmica.",
+    ok:"Bom começo — revise os cuidados odontológicos por condição.",
+    good:"Muito bom! Reforce os protocolos de manejo clínico.",
+    perfect:"Excelente! Domínio completo das manifestações sistêmicas."
+  }
+};
+
+let activeQuiz = null;
+let current = 0;
+let score = 0;
+let answered = false;
+
+const qEl = document.getElementById('question');
+const optsEl = document.getElementById('options');
+const fbEl = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
+const fillEl = document.getElementById('fill');
+const qcountEl = document.getElementById('qcount');
+const scountEl = document.getElementById('scount');
+const quizAreaEl = document.getElementById('quizArea');
+const resultEl = document.getElementById('quizResult');
+const modalEl = document.getElementById('quizModal');
+
+let scrollLockY = 0;
+
+function lockBodyScroll(){
+  scrollLockY = window.scrollY || window.pageYOffset || 0;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollLockY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+
+function unlockBodyScroll(){
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, scrollLockY);
+}
+
+function openQuiz(id){
+  activeQuiz = QUIZZES[id];
+  current = 0;
+  score = 0;
+  document.getElementById('modalTitle').textContent = activeQuiz.title;
+  document.getElementById('modalSub').textContent = activeQuiz.subtitle;
+  quizAreaEl.style.display = 'block';
+  resultEl.style.display = 'none';
+  modalEl.classList.add('open');
+  lockBodyScroll();
+  loadQuestion();
+}
+
+function closeQuiz(){
+  modalEl.classList.remove('open');
+  unlockBodyScroll();
+}
+
+function loadQuestion(){
+  answered = false;
+  const item = activeQuiz.questions[current];
+  qEl.textContent = item.q;
+  optsEl.innerHTML = '';
+  fbEl.style.display = 'none';
+  nextBtn.style.display = 'none';
+  item.opts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectAnswer(idx, btn));
+    optsEl.appendChild(btn);
+  });
+  fillEl.style.width = (current / activeQuiz.questions.length * 100) + '%';
+  qcountEl.textContent = `Questão ${current + 1} de ${activeQuiz.questions.length}`;
+  scountEl.textContent = `Acertos: ${score}`;
+}
+
+function selectAnswer(idx, btn){
+  if (answered) return;
+  answered = true;
+  const item = activeQuiz.questions[current];
+  const buttons = optsEl.querySelectorAll('.opt');
+  buttons.forEach(b => b.disabled = true);
+  if (idx === item.a){
+    btn.classList.add('correct');
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    buttons[item.a].classList.add('correct');
+  }
+  fbEl.textContent = item.exp;
+  fbEl.style.display = 'block';
+  nextBtn.style.display = 'block';
+  scountEl.textContent = `Acertos: ${score}`;
+}
+
+function nextQuestion(){
+  current++;
+  if (current < activeQuiz.questions.length){
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  quizAreaEl.style.display = 'none';
+  resultEl.style.display = 'block';
+  fillEl.style.width = '100%';
+  document.getElementById('finalScore').textContent = `${score}/${activeQuiz.questions.length}`;
+  const pct = score / activeQuiz.questions.length;
+  let msg = activeQuiz.low;
+  if (pct === 1) msg = activeQuiz.perfect;
+  else if (pct >= 0.75) msg = activeQuiz.good;
+  else if (pct >= 0.5) msg = activeQuiz.ok;
+  document.getElementById('finalMsg').textContent = msg;
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  resultEl.style.display = 'none';
+  quizAreaEl.style.display = 'block';
+  loadQuestion();
+}
+</script>
+</body>
+</html>
